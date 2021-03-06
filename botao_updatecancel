@@ -1,0 +1,44 @@
+Sub Reset_form1()
+
+UserForm1.txtclient_s.Text = ""
+UserForm1.txtdate_s.Text = ""
+UserForm1.txtafter_s.Text = ""
+UserForm1.txtbefore_s.Text = ""
+UserForm1.txtdescription_s.Text = ""
+End Sub
+
+------------------
+
+Private Sub cmdUpdate_Click()
+
+Dim clientid As String
+clientid = Trim(search_form.txtclientid.Text)
+totrows = Worksheets("Database").Cells(Rows.Count, 3).End(xlUp).Row
+
+For i = 3 To totrows
+    If Worksheets("Database").Cells(i, 3).Value = clientid Then
+    
+        Worksheets("Database").Cells(i, 3).Value = UserForm1.txtclient_s.Text
+        Worksheets("Database").Cells(i, 8).Value = UserForm1.txtdate_s.Value
+        Worksheets("Database").Cells(i, 5).Value = UserForm1.txtafter_s.Text
+        Worksheets("Database").Cells(i, 6).Value = UserForm1.txtbefore_s.Text
+        Worksheets("Database").Cells(i, 13).Value = UserForm1.txtdescription_s.Text
+        
+       
+        
+End If
+
+Next
+
+Call Reset_form1
+UserForm1.Hide
+MsgBox "Client's data updated"
+
+End Sub
+
+---------------
+
+Private Sub cmdExit_Click()
+Call Reset_form1
+Unload Me
+End Sub
