@@ -1,0 +1,61 @@
+Public Sub generate_pdf()
+
+Dim wsA As Worksheet
+Dim wbA As Workbook
+Dim strTime As String
+Dim strName As String
+Dim strPath As String
+Dim strFile As String
+Dim strPathFile As String
+Dim myFile As Variant
+On Error GoTo errHandler
+
+Sheets("Home").Select
+    Range("B8:C9").Select
+    ActiveCell.FormulaR1C1 = "=COUNTA(R[7]C:R[19]C)"
+    Range("C16:D16").Select
+    Range("E8:F9").Select
+    ActiveCell.FormulaR1C1 = "=SUM(R[7]C[-1]:R[1048568]C[-1])"
+    Range("H8:I9").Select
+    ActiveCell.FormulaR1C1 = "=SUM(R[7]C:R[1048568]C)"
+
+Set wbA = ActiveWorkbook
+Set wsA = Sheets("Home")
+strTime = Format(Now(), "yyyymm")
+
+strPath = wbA.Path
+If strPath = "" Then
+    strPath = Application.DefaultFilePath
+End If
+strPath = strPath & "\"
+
+strName = "Report_Dev"
+
+strFile = strName & "_" & strTime & ".pdf"
+strPathFile = strPath & strFile
+
+myFile = Application.GetSaveAsFilename _
+    (InitialFileName:=strPathFile, _
+        FileFilter:="PDF Files (*.pdf), *.pdf", _
+        Title:="Select Folder and FileName to save")
+        
+If myFile <> "False" Then
+    wsA.ExportAsFixedFormat _
+        Type:=xlTypePDF, _
+        Filename:=myFile, _
+        Quality:=xlQualityStandard, _
+        IncludeDocProperties:=True, _
+        IgnorePrintAreas:=False, _
+        OpenAfterPublish:=True
+    MsgBox "PDF file has been created: " _
+        & vbCrLf _
+        & myFile
+End If
+
+exitHandler:
+    Exit Sub
+errHandler:
+    MsgBox "Could not create PDF file"
+    Resume exitHandler
+    
+End Sub
