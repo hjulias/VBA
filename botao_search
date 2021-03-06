@@ -1,0 +1,29 @@
+Private Sub button_search_Click()
+
+Dim clientid As String
+clientid = Trim(search_form.txtclientid.Text)
+totrows = Worksheets("Database").Cells(Rows.Count, 3).End(xlUp).Row
+
+For i = 3 To totrows
+    If Worksheets("Database").Cells(i, 3).Value = clientid Then
+    
+        UserForm1.txtclient_s.Text = Worksheets("Database").Cells(i, 3).Value
+        UserForm1.txtdate_s.Text = Worksheets("Database").Cells(i, 8).Value
+        UserForm1.txtafter_s.Text = Worksheets("Database").Cells(i, 5).Value
+        UserForm1.txtbefore_s.Text = Worksheets("Database").Cells(i, 6).Value
+        UserForm1.txtdescription_s.Text = Worksheets("Database").Cells(i, 13).Value
+    
+    
+       
+        
+End If
+    
+Next
+
+search_form.Hide
+UserForm1.Show
+
+    
+   
+    
+End Sub
