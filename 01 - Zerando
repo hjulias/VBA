@@ -1,0 +1,43 @@
+#Sub para dar um clean no Form
+
+Sub Reset()
+
+    Dim iRow As Long
+    
+    iRow = [Counta(Database!B:B)] ' idetifying the last row
+    
+    With frmForm
+    
+        .txtclient.Value = ""
+        .txtdate.Value = "'"
+        .txtbefore.Value = ""
+        .txtafter.Value = ""
+        .txtdescription.Value = ""
+        .opindividual.Value = False
+        .oppic.Value = False
+        .opoperational.Value = False
+        .opfund.Value = False
+        .opttemp.Value = False
+        .optfixed.Value = False
+        .optubs.Value = False
+        .optother.Value = False
+        .txt_other.Visible = False
+        
+        
+        .broker.Clear
+        
+        .broker.AddItem "Helton Pereira"
+        .broker.AddItem "-"
+        
+        .approvedby.Clear
+        
+        .approvedby.AddItem "André Godoi"
+        .approvedby.AddItem "-"
+        
+        
+    
+    End With
+
+
+
+End Sub
