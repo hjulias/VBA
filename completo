@@ -1,0 +1,166 @@
+Option Explicit
+Sub search()
+    search_form.Show
+End Sub
+Sub Reset()
+
+    Dim iRow As Long
+    
+    iRow = [Counta(Database!B:B)] ' idetifying the last row
+    
+    With frmForm
+    
+        .txtclient.Value = ""
+        .txtdate.Value = "'"
+        .txtbefore.Value = ""
+        .txtafter.Value = ""
+        .txtdescription.Value = ""
+        .opindividual.Value = False
+        .oppic.Value = False
+        .opoperational.Value = False
+        .opfund.Value = False
+        .opttemp.Value = False
+        .optfixed.Value = False
+        .optubs.Value = False
+        .optother.Value = False
+        .txt_other.Visible = False
+        
+        
+        .broker.Clear
+        
+        .broker.AddItem "Helton Pereira"
+        .broker.AddItem "-"
+        
+        .approvedby.Clear
+        
+        .approvedby.AddItem "André Godoi"
+        .approvedby.AddItem "-"
+        
+        
+    
+    End With
+
+
+
+End Sub
+
+
+Sub Submit()
+
+    Dim sh As Worksheet
+    Dim iRow As Long
+    
+    Set sh = ThisWorkbook.Sheets("Database")
+    
+    iRow = [Counta(Database!B:B)] + 1
+    
+    With sh
+    
+        .Cells(iRow, 2) = iRow - 2
+        
+        .Cells(iRow, 3) = frmForm.txtclient.Value
+        
+        .Cells(iRow, 4) = IIf(frmForm.opfund.Value = True, "Fund", IIf(frmForm.opindividual.Value = True, "Individual", IIf(frmForm.oppic.Value = True, "PIC", "Operational Comp.")))
+                
+        .Cells(iRow, 5) = frmForm.txtbefore.Value
+        
+        .Cells(iRow, 6) = frmForm.txtafter.Value
+        
+        .Cells(iRow, 7) = IIf(frmForm.opttemp.Value = True, "Temporary", IIf(frmForm.optfixed.Value = True, "Fixed", ""))
+        
+        .Cells(iRow, 8) = frmForm.txtdate.Value
+        
+        .Cells(iRow, 9) = IIf(frmForm.optubs.Value = True, "UBS CONSENSO INVESTIMENTOS LTDA", frmForm.txt_other.Value)
+        
+        .Cells(iRow, 10) = Application.UserName
+        
+        .Cells(iRow, 11) = frmForm.approvedby.Value
+        
+        .Cells(iRow, 12) = frmForm.broker.Value
+        
+        .Cells(iRow, 13) = frmForm.txtdescription.Value
+        
+    
+    End With
+
+
+End Sub
+
+
+Sub Show_Form()
+    
+    frmForm.Show
+
+End Sub
+
+Public Function LastModified() As Date
+
+    LastModified = ActiveWorkbook.BuiltinDocumentProperties("Last Save Time")
+    
+End Function
+
+Public Sub generate_pdf()
+
+Dim wsA As Worksheet
+Dim wbA As Workbook
+Dim strTime As String
+Dim strName As String
+Dim strPath As String
+Dim strFile As String
+Dim strPathFile As String
+Dim myFile As Variant
+On Error GoTo errHandler
+
+Sheets("Home").Select
+    Range("B8:C9").Select
+    ActiveCell.FormulaR1C1 = "=COUNTA(R[7]C:R[19]C)"
+    Range("C16:D16").Select
+    Range("E8:F9").Select
+    ActiveCell.FormulaR1C1 = "=SUM(R[7]C[-1]:R[1048568]C[-1])"
+    Range("H8:I9").Select
+    ActiveCell.FormulaR1C1 = "=SUM(R[7]C:R[1048568]C)"
+
+Set wbA = ActiveWorkbook
+Set wsA = Sheets("Home")
+strTime = Format(Now(), "yyyymm")
+
+strPath = wbA.Path
+If strPath = "" Then
+    strPath = Application.DefaultFilePath
+End If
+strPath = strPath & "\"
+
+strName = "Report_Dev"
+
+strFile = strName & "_" & strTime & ".pdf"
+strPathFile = strPath & strFile
+
+myFile = Application.GetSaveAsFilename _
+    (InitialFileName:=strPathFile, _
+        FileFilter:="PDF Files (*.pdf), *.pdf", _
+        Title:="Select Folder and FileName to save")
+        
+If myFile <> "False" Then
+    wsA.ExportAsFixedFormat _
+        Type:=xlTypePDF, _
+        Filename:=myFile, _
+        Quality:=xlQualityStandard, _
+        IncludeDocProperties:=True, _
+        IgnorePrintAreas:=False, _
+        OpenAfterPublish:=True
+    MsgBox "PDF file has been created: " _
+        & vbCrLf _
+        & myFile
+End If
+
+exitHandler:
+    Exit Sub
+errHandler:
+    MsgBox "Could not create PDF file"
+    Resume exitHandler
+    
+End Sub
+        
+
+
+
