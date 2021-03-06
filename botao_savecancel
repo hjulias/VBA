@@ -1,0 +1,17 @@
+Private Sub cmdSave_Click()
+    
+    Call Submit
+    Call Reset
+       
+    frmForm.Hide
+    MsgBox "Client's Limit addeed successfully!"
+End Sub
+
+------------------------
+
+Private Sub cmdReset_Click()
+        
+    Call Reset
+    
+    Unload Me
+End Sub
