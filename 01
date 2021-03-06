@@ -1,0 +1,42 @@
+# Sub para adicionar valores do FORM na Database
+
+Sub Submit()
+
+    Dim sh As Worksheet
+    Dim iRow As Long
+    
+    Set sh = ThisWorkbook.Sheets("Database")
+    
+    iRow = [Counta(Database!B:B)] + 1
+    
+    With sh
+    
+        .Cells(iRow, 2) = iRow - 2
+        
+        .Cells(iRow, 3) = frmForm.txtclient.Value
+        
+        .Cells(iRow, 4) = IIf(frmForm.opfund.Value = True, "Fund", IIf(frmForm.opindividual.Value = True, "Individual", IIf(frmForm.oppic.Value = True, "PIC", "Operational Comp.")))
+                
+        .Cells(iRow, 5) = frmForm.txtbefore.Value
+        
+        .Cells(iRow, 6) = frmForm.txtafter.Value
+        
+        .Cells(iRow, 7) = IIf(frmForm.opttemp.Value = True, "Temporary", IIf(frmForm.optfixed.Value = True, "Fixed", ""))
+        
+        .Cells(iRow, 8) = frmForm.txtdate.Value
+        
+        .Cells(iRow, 9) = IIf(frmForm.optubs.Value = True, "UBS CONSENSO INVESTIMENTOS LTDA", frmForm.txt_other.Value)
+        
+        .Cells(iRow, 10) = Application.UserName
+        
+        .Cells(iRow, 11) = frmForm.approvedby.Value
+        
+        .Cells(iRow, 12) = frmForm.broker.Value
+        
+        .Cells(iRow, 13) = frmForm.txtdescription.Value
+        
+    
+    End With
+
+
+End Sub
